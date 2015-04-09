@@ -189,6 +189,7 @@ public class Sistema extends HttpServlet {
         String cargo;
         double sueldo;
         String fechaIngreso;
+        String usuarioExistente[]=null;
         cedula = Integer.parseInt(request.getParameter("id"));
         nombre = request.getParameter("nombre");
         cargo = request.getParameter("tipoCargo");
@@ -198,12 +199,17 @@ public class Sistema extends HttpServlet {
         String guardaEmpleado;
         try {
           EmpleadoDAO guardarEmpleado = new EmpleadoDAO();
-          //guardarEmpleado.guardar(nuevoEmpleado);
-          if (guardarEmpleado.guardar(nuevoEmpleado)) {
-            guardaEmpleado = "ok";
-          } else {
-            guardaEmpleado = "error";
+          usuarioExistente=guardarEmpleado.consultarEmpleado(cedula);
+          if(usuarioExistente[0].equals("Error")){
+            if (guardarEmpleado.guardar(nuevoEmpleado)) {
+              guardaEmpleado = "ok";
+            } else {
+              guardaEmpleado = "error";
+            }
+          }else{
+          guardaEmpleado="Existe";
           }
+          
           //this.respuesta = guardarEmpleado.getError();
         } catch (SQLException ex) {
           guardaEmpleado="fatalError";

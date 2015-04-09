@@ -7,6 +7,7 @@ package com.validacion.Clases;
 
 import java.util.Date;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -92,7 +93,7 @@ public class Calculos {
   public int puntosEmpleado(String estadoCivil, int estrato, String fechaIngreso, int numHijos, boolean casaPropia) {
     int puntos;
     puntos = 0;
-    if(estrato>0 && estrato>=0 ){
+    if(estrato>0 && estrato<=6 && numHijos>=0 ){
       if(estadoCivil.equals("C") || estadoCivil.equals("S")){
         if (estadoCivil.equals("C") && numHijos == 0) {
           puntos = puntos + 50;
