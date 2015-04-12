@@ -66,6 +66,8 @@ public class EmpleadoDAO {
         fechaIngreso = resultado.getString("fecha_ingreso");
         mensajeDevuelto[0] = resultado.getString("fecha_ingreso");
         mensajeDevuelto[1] = resultado.getString("tipo_de_cargo");
+        mensajeDevuelto[2] = resultado.getString("nombre");
+        mensajeDevuelto[3] = resultado.getString("sueldo");
         empleado++;
      } 
     } catch (SQLException ex) {

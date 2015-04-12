@@ -20,14 +20,15 @@ import org.apache.tomcat.jni.OS;
  *
  * @author AndresV
  */
-public class VariablesDAO {
+public class TopeDAO {
 
   private String error = "";
   private Connection conn = null;
-  private static String guardarVariable = "INSERT INTO variable (id,valor,tipo) VALUES (null,?,?)";
+  private static String guardarVariable = "INSERT INTO tope_maximo (id,tipo_de_cargo,cantidad_de_salarios) VALUES (null,?,?)";
   private static String consultaVariable = "SELECT * FROM variable WHERE id IN (SELECT MAX(id) FROM variable GROUP BY tipo) ORDER BY tipo DESC";
+  private static String topeXEmpleado= "SELECT cantidad_de_salarios FROM tope_maximo WHERE tipo_de_cargo = ? ORDER BY id DESC LIMIT 1";
 
-  public VariablesDAO() throws SQLException {
+  public TopeDAO() throws SQLException {
     this.conn = ConexionDB.obtenerConexion();
   }
 
@@ -36,8 +37,8 @@ public class VariablesDAO {
     boolean resultado = true;
     try {
       PreparedStatement ps = conn.prepareStatement(guardarVariable);
-      ps.setDouble(1, variable.getValor());
-      ps.setString(2, variable.getTipo());
+      ps.setString(1, variable.getTipo());
+      ps.setDouble(2, variable.getValor());
       if (ps.executeUpdate() == 0) {
         resultado = true;
       }
@@ -75,6 +76,22 @@ public class VariablesDAO {
       return mensajeDevuelto;
     }
 
+  }
+  public int topeXCargo(String cargo){
+    int cantSalarios;
+    cantSalarios = 0;
+    try {
+      PreparedStatement ps = conn.prepareStatement(topeXEmpleado);
+      ps.setString(1, cargo);
+      ResultSet resultado = ps.executeQuery();
+      while (resultado.next()) {
+        cantSalarios =  Integer.parseInt(resultado.getString("cantidad_de_salarios"));
+      }
+    } catch (SQLException ex) {
+      Logger.getLogger(EmpleadoDAO.class.getName()).log(Level.SEVERE, null, ex);
+    }
+      return cantSalarios;
+    
   }
 
   public String getError() {

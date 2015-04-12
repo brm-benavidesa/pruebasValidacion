@@ -10,6 +10,7 @@ import com.validacion.Clases.Calculos;
 import com.validacion.Clases.Empleado;
 import com.validacion.Clases.Variables;
 import com.validacion.DAO.EmpleadoDAO;
+import com.validacion.DAO.TopeDAO;
 import com.validacion.DAO.VariablesDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -96,21 +97,36 @@ public class Sistema extends HttpServlet {
   @Override
   protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     JSONObject json = new JSONObject();
-      response.setContentType(CONTENT_TYPE_JSON);
-      PrintWriter out = response.getWriter();
-      String empelado[] = null;
-      int respuestaPuntos;
-      long valorTotal;
-      double totalCuotas;
-      totalCuotas=0;
-      valorTotal=0;
-      respuestaPuntos=0;
-      //empelado[0]="";
-     // System.out.print(json);
-
+    response.setContentType(CONTENT_TYPE_JSON);
+    PrintWriter out = response.getWriter();
+    String empelado[] = null;
+    int respuestaPuntos;
+    long valorTotal;
+    double totalCuotas;
+    totalCuotas=0;
+    valorTotal=0;
+    respuestaPuntos=0;
+    String errorTope;
+    errorTope = "null";
+    //empelado[0]="";
+   // System.out.print(json);
+    //CONSULTO LAS VARIABLES ACTUALES DEL SISTEMA
+    if ((request.getParameter("traeVariable")!=null)) {
+      String variablesSistema []=null;
+      try {
+        VariablesDAO varSistema = new VariablesDAO();
+        variablesSistema = varSistema.consultarVariables();
+      } catch (SQLException ex) {
+        Logger.getLogger(Sistema.class.getName()).log(Level.SEVERE, null, ex);
+      }
+      json.put("SMMLV", variablesSistema[0]);
+      json.put("interes",variablesSistema[1]);
+      out.print(json);
+      out.close();
+    }
+   //CALCULOS GENERALES 
     if ((request.getParameter("consultaEmpleado")!=null)) {
       String variablesSistema []=null;
-      
       try {
         VariablesDAO varSistema = new VariablesDAO();
         variablesSistema = varSistema.consultarVariables();
@@ -125,12 +141,37 @@ public class Sistema extends HttpServlet {
         this.aprobado = "Error";
         Logger.getLogger(Sistema.class.getName()).log(Level.SEVERE, null, ex);
       }
+      /*
+      *CALCULAR LOS PUNTOS Y EL TOPE MAXIMO QUE PUEDE PEDIR PRESTADO EL EMPLEADO
+      */
       if ((request.getParameter("estadoCivil")!=null)) {
         boolean casa;
+        int maxTope;
+        maxTope=0;
+        try {
+          TopeDAO topeXCargo = new TopeDAO();
+          maxTope = topeXCargo.topeXCargo(empelado[1]);
+        } catch (SQLException ex) {
+          errorTope=ex.getMessage();
+        }
         casa = request.getParameter("casaPropia").equals("true");
         Calculos nuevaConsulta = new Calculos();
         respuestaPuntos = nuevaConsulta.puntosEmpleado(request.getParameter("estadoCivil"), Integer.parseInt(request.getParameter("estrato")), empelado[0], Integer.parseInt(request.getParameter("numHijos")), casa);
-        valorTotal = nuevaConsulta.topeMaximo(empelado[1],Long.parseLong(variablesSistema[0]));
+        valorTotal = nuevaConsulta.topeMaximo(empelado[1],Long.parseLong(variablesSistema[0]),maxTope);
+        json.put("puntos",respuestaPuntos);
+        json.put("valorTotal",valorTotal);
+        json.put("nombre",empelado[2]);
+        if(empelado[1].equals("A")){
+          json.put("cargo","Administrativo");
+        }
+        if(empelado[1].equals("O")){
+          json.put("cargo","Operativo");
+        }
+        if(empelado[1].equals("D")){
+          json.put("cargo","Directivo");
+        }
+        json.put("sueldo",empelado[3]);
+        json.put("fecha",empelado[0]);
       }
       if ((request.getParameter("valorSolicitar")!=null)) {
         int catidadMeses;
@@ -139,35 +180,124 @@ public class Sistema extends HttpServlet {
         catidadMeses = (Integer.parseInt(request.getParameter("catidadMeses")))*12;
         Calculos nuevaConsulta = new Calculos();
         totalCuotas = nuevaConsulta.cuotas(Double.parseDouble(variablesSistema[1]), Long.parseLong(request.getParameter("valorSolicitar")), catidadMeses,valorMaxPrestamo);
+        json.put("totalCuotas",totalCuotas);
+
       }
       json.put("respuesta", empelado[0]);
-      json.put("puntos",respuestaPuntos);
-      json.put("valorTotal",valorTotal);
-      json.put("totalCuotas",totalCuotas);
       out.print(json);
       out.close();
     } else {
-        if(request.getParameter("usuario")!=null){
-          Calculos validar = new Calculos();
-          boolean respuestaMsg;
-          respuestaMsg = validar.logIn(request.getParameter("usuario"),request.getParameter("password"));
-          if(respuestaMsg){
-            json.put("respuesta","ok");
-          }else{
-            json.put("respuesta","mal");
-          }
-          out.print(json);
-          out.close();
-      }
-      if ((request.getParameter("SMMLV")!=null)) {
+      if ((request.getParameter("admin")!=null)||(request.getParameter("opera")!=null)||(request.getParameter("direc")!=null)) {
         String variable;
-        double SMMLV;
-        double interes;
-        try{
-          SMMLV = Double.parseDouble(request.getParameter("SMMLV"));
-          interes = Double.parseDouble(request.getParameter("interes"));
+        double valor;
+        String tipo;
+        if ((!request.getParameter("admin").equals(""))){
+          try{
+            valor = Double.parseDouble(request.getParameter("admin"));
+            tipo = "A";
+            Variables objVariable = new Variables();
+            objVariable.guardarVariable(valor,tipo);
+            try {
+              TopeDAO varReg = new TopeDAO();
+              variable = varReg.guardar(objVariable);
+              json.put("respuesta",variable);
+              out.print(json);
+              out.close();
+            } catch (SQLException ex) {
+              Logger.getLogger(Sistema.class.getName()).log(Level.SEVERE, null, ex);
+            }
+          }catch(NumberFormatException ex){
+            json.put("respuesta",ex.getMessage());
+            out.print(json);
+            out.close();
+          }
+        }
+        if ((!request.getParameter("opera").equals(""))){
+          try{
+            valor = Double.parseDouble(request.getParameter("opera"));
+            tipo = "O";
+            Variables objVariable = new Variables();
+            objVariable.guardarVariable(valor,tipo);
+            try {
+              TopeDAO varReg = new TopeDAO();
+              variable = varReg.guardar(objVariable);
+              json.put("respuesta",variable);
+              out.print(json);
+              out.close();
+            } catch (SQLException ex) {
+              Logger.getLogger(Sistema.class.getName()).log(Level.SEVERE, null, ex);
+            }
+          }catch(NumberFormatException ex){
+            json.put("respuesta",ex.getMessage());
+            out.print(json);
+            out.close();
+          }
+        }
+        if ((!request.getParameter("direc").equals(""))){
+          try{
+            valor = Double.parseDouble(request.getParameter("direc"));
+            tipo = "D";
+            Variables objVariable = new Variables();
+            objVariable.guardarVariable(valor,tipo);
+            try {
+              TopeDAO varReg = new TopeDAO();
+              variable = varReg.guardar(objVariable);
+              json.put("respuesta",variable);
+              out.print(json);
+              out.close();
+            } catch (SQLException ex) {
+              Logger.getLogger(Sistema.class.getName()).log(Level.SEVERE, null, ex);
+            }
+          }catch(NumberFormatException ex){
+            json.put("respuesta",ex.getMessage());
+            out.print(json);
+            out.close();
+          }
+        }
+
+      }
+      if(request.getParameter("usuario")!=null){
+        Calculos validar = new Calculos();
+        boolean respuestaMsg;
+        respuestaMsg = validar.logIn(request.getParameter("usuario"),request.getParameter("password"));
+        if(respuestaMsg){
+          json.put("respuesta","ok");
+        }else{
+          json.put("respuesta","mal");
+        }
+        out.print(json);
+        out.close();
+      }
+      if ((request.getParameter("SMMLV")!=null)||(request.getParameter("interes")!=null)) {
+        String variable;
+        double valor;
+        String tipo;
+        if ((!request.getParameter("SMMLV").equals(""))){
+          try{
+            valor = Double.parseDouble(request.getParameter("SMMLV"));
+            tipo = "SM";
+            Variables objVariable = new Variables();
+            objVariable.guardarVariable(valor,tipo);
+            try {
+              VariablesDAO varReg = new VariablesDAO();
+              variable = varReg.guardar(objVariable);
+              json.put("respuesta",variable);
+              out.print(json);
+              out.close();
+            } catch (SQLException ex) {
+              Logger.getLogger(Sistema.class.getName()).log(Level.SEVERE, null, ex);
+            }
+          }catch(NumberFormatException ex){
+            json.put("respuesta",ex.getMessage());
+            out.print(json);
+            out.close();
+          }
+        }
+        if ((!request.getParameter("interes").equals(""))){
+          valor = Double.parseDouble(request.getParameter("interes"));
+          tipo = "IT";
           Variables objVariable = new Variables();
-          objVariable.guardarVariable(SMMLV,interes);
+          objVariable.guardarVariable(valor,tipo);
           try {
             VariablesDAO varReg = new VariablesDAO();
             variable = varReg.guardar(objVariable);
@@ -177,10 +307,6 @@ public class Sistema extends HttpServlet {
           } catch (SQLException ex) {
             Logger.getLogger(Sistema.class.getName()).log(Level.SEVERE, null, ex);
           }
-        }catch(NumberFormatException ex){
-          json.put("respuesta",ex.getMessage());
-          out.print(json);
-          out.close();
         }
     }else{
         Empleado nuevoEmpleado = new Empleado();

@@ -12,7 +12,7 @@
     <script type="text/javascript" src="js/libs/jquery/jquery.min.js"></script>
     <script type="text/javascript" src="js/libs/twitter-bootstrap/js/bootstrap.js"></script>
     <script type="text/javascript" src="js/libs/jquery-validate/jquery.validate.js"></script>
-    <script type="text/javascript" src="js/calculos.js"></script>
+    <script type="text/javascript" src="js/admin.js"></script>
     <link rel="stylesheet" type="text/css" href="js/libs/twitter-bootstrap/css/bootstrap.css" media="all" />
     <title>Guardar empleado</title>
   </head>
@@ -96,33 +96,41 @@
               </div>
             </form>
           </div>
-          <div class="col-sm-7 col-md-7 tab-pane" role="tabpanel"  id="profile">
-            <form action="Sistema" class="form-horizontal" method="post" role="form" id="guardarVariables" >
-              <div class="form-group">
-                <label for="SMMLV" class="col-lg-2 control-label">SMMLV</label>
-                <div class="col-lg-4">
-                  <input type="text" class="form-control" name="SMMLV" id="SMMLV"
-                         placeholder="SMMLV">
-                </div>
+          <div class="col-sm-12 col-md-12 tab-pane" role="tabpanel"  id="profile">
+            <div class="row">
+              <div class="col-lg-12 col-md-12">
+                <h3>Las variables actuales del sistemas son SMMLV:<span id="valSMMLV"></span> Tasa de interes: <span id="valInteres"></span></h3>
               </div>
-              <div class="form-group">
-                <label for="interes" class="col-lg-2 control-label">% de Interes</label>
-                <div class="col-lg-4">
-                  <input type="text" class="form-control" name="interes" id="interes" 
-                         placeholder="% de Interes">
+              <br />
+            </div>
+            <div class="row">
+              <form action="Sistema" class="form-horizontal" method="post" role="form" id="guardarVariables" >
+                <div class="form-group">
+                  <label for="SMMLV" class="col-lg-2 control-label">SMMLV</label>
+                  <div class="col-lg-3">
+                    <input type="text" class="form-control" name="SMMLV" id="SMMLV"
+                           placeholder="SMMLV">
+                  </div>
                 </div>
-              </div>
-              <div class="col-lg-2 control-label">
-                <button type="button" id="guardaVariable" class="btn btn-primary">Guardar</button>
-              </div><br>
-              <div class="form-group">
-                <h3 class="col-lg-4 control-label" style="color: red;display: none" id="varMsg">Variables Guardadas</h3>
+                <div class="form-group">
+                  <label for="interes" class="col-lg-2 control-label">Tasa de Interes</label>
+                  <div class="col-lg-3">
+                    <input type="text" class="form-control" name="interes" id="interes" 
+                           placeholder="Tasa de Interes">
+                  </div>
+                </div>
+                <div class="col-lg-2 control-label">
+                  <button type="button" id="guardaVariable" class="btn btn-primary">Guardar</button>
+                </div><br>
+                <div class="form-group">
+                  <h3 class="col-lg-4 control-label" style="color: red;display: none" id="varMsg">Variables Guardadas</h3>
 
-              </div>
-            </form>
+                </div>
+              </form>
+            </div>
           </div>
           <div class="col-sm-7 col-md-7 tab-pane" role="tabpanel"  id="topeMaximo">
-            <form action="Sistema" class="form-horizontal" method="post" role="form" id="guardarVariables" >
+            <form action="Sistema" class="form-horizontal" method="post" role="form" id="guardarTope" >
               <div class="form-group">
                 <label for="admin" class="col-lg-2 control-label">Administrativo</label>
                 <div class="col-lg-4">
@@ -142,7 +150,7 @@
                 </div>
               </div>
               <div class="col-lg-2 control-label">
-                <button type="button" id="guardaVariable" class="btn btn-success">Guardar</button>
+                <button type="button" id="guardaTope" class="btn btn-success">Guardar</button>
               </div><br>
               <div class="form-group">
                 <h3 class="col-lg-4 control-label" style="color: red;display: none" id="varMsg">Topes Guardados</h3>
@@ -152,5 +160,6 @@
           </div>
         </div>
       </div>
+    </div>
   </body>
 </html>

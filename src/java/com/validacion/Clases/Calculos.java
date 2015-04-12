@@ -142,17 +142,17 @@ public class Calculos {
     return puntos;
   }
 
-  public long topeMaximo(String tipoEmpeado, long SMMLV) {
+  public long topeMaximo(String tipoEmpeado, long SMMLV,int topeMAX) {
     long totalPrestamo;
     if(SMMLV>1){
       if (tipoEmpeado.equals("A")) {
-        totalPrestamo = (SMMLV * 100);
+        totalPrestamo = (SMMLV * topeMAX);
       }
       else if (tipoEmpeado.equals("O")) {
-        totalPrestamo = (SMMLV * 110);
+        totalPrestamo = (SMMLV * topeMAX);
       }
       else if (tipoEmpeado.equals("D")) {
-        totalPrestamo = (SMMLV * 90);
+        totalPrestamo = (SMMLV * topeMAX);
       }else{
         totalPrestamo = (-1);
       }

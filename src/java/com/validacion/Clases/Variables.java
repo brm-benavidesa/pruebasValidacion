@@ -10,37 +10,37 @@ package com.validacion.Clases;
  * @author AndresV
  */
 public class Variables {
-  private double SMMLV;
-  private double interes;
+  private double valor;
+  private String tipo;
 
   public Variables(){
      
   }
   
-  public String guardarVariable(double SMMLV, double interes){
+  public String guardarVariable(double valor, String Variables){
     try{
-      this.setSMMLV(SMMLV);
-      this.interes=(interes);
+      this.setValor(valor);
+      this.tipo=(Variables);
       return "registroOK";
       
     }catch(NumberFormatException ex){
       return ex.getMessage();
     }
   }
-  public double getSMMLV() {
-    return SMMLV;
+  public double getValor() {
+    return valor;
   }
 
-  public void setSMMLV(double SMMLV) {
-    this.SMMLV = SMMLV;
+  public void setValor(double valor) {
+    this.valor = valor;
   }
 
-  public double getInteres() {
-    return interes;
+  public String getTipo() {
+    return tipo;
   }
 
-  public void setInteres(double interes) {
-    this.interes = interes;
+  public void setTipo(String tipo) {
+    this.tipo = tipo;
   }
   
   

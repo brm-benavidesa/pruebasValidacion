@@ -1,69 +1,12 @@
 $( document ).ready(function() {
-   //INGRESAS COMO ADMINISTRADOR AL SISTEMA
-  $("#logButton").click(function(){
-    $.ajax({
-      url: "Sistema",
-      type: 'POST',
-      //dataType:"json",
-      data:$("#logIn").serialize()
-    }).success(function(data) {
-				if((data.respuesta==="ok")){
-          $("#logIn").css("display","none");
-          $("#admin").fadeIn();
-        }
-        else{
-          alert("Error en los datos de autenticacion")
-        }
-		});
-    
-  });
-  //GUARDAR UN EMPLEADO
-  $("#guardaEmpleado").click(function(){
-    $.ajax({
-      url: "Sistema",
-      type: 'POST',
-      //dataType:"json",
-      data:$("#guardarEmpleado").serialize()
-    }).success(function(data) {
-				if((data.respuesta==="ok")){
-          $("#empMsg").fadeIn();
-          $("#empMsg").fadeOut(5000);
-        }else if(data.respuesta=="Existe"){
-          
-          alert("El numero de Cédula ya se encuentra registrado en el sistema");
-        }
-        else{
-          alert("Error en los datos de autenticacion");
-        }
-		});
-    
-  });
-  //GUARDAR UNA VARIABLE
-  $("#guardaVariable").click(function(){
-    $.ajax({
-      url: "Sistema",
-      type: 'POST',
-      data:$("#guardarVariables").serialize()
-    }).success(function(data) {
-				if((data.respuesta==="ok")){
-         $("#varMsg").fadeIn();
-         $("#varMsg").fadeOut(5000);
-        }
-        else{
-          $("#varMsg").text(data.respuesta);
-          $("#varMsg").fadeIn();
-          $("#varMsg").fadeOut(5000);
-        }
-		});
-    
-  });
+  
   //BUSCAR UN EMPLEADO POR CEDULA
   $("#calculo").validate({
     rules:{
       consultaEmpleado: "required"
     }
   });
-  $("#datos").validate({
+  $("#calculoPuntos").validate({
     rules:{
       estadoCivil: "required",
       numHijos: "required",
@@ -76,8 +19,7 @@ $( document ).ready(function() {
       estrato: "Campo requerido"
     }
   });
-  $("#enviar").click(function(){
-    
+  $("#enviar").click(function(){   
     if($("#calculo").valid()){
       $.ajax({
         url: "Sistema",
@@ -85,29 +27,36 @@ $( document ).ready(function() {
         //dataType:"json",
         data:$("#calculo").serialize()
       }).success(function(data) {
-          if((data.respuesta=="Error")){
+          if((data.respuesta==="Error")){
             alert("El usuario no esta registrado");
         }else{
-            $("#datos").css('display','block');
-          }
+          $("#datos").css('display','block');
+          puntosTopeMax();
+        }
       });
+      
     }
   });
   //CALCULAR LOS PUNTOS DEL EMPLEADO QUE ESTOY CONSULTANDO
-  $("#calcuPuntos").click(function(){
-    if($("#datos").valid()){
+  var puntosTopeMax = function(){
+    if($("#calculoPuntos").valid()){
       $.ajax({
         url: "Sistema",
         type: 'POST',
-        //dataType:"json",
-        data:$("#datos").serialize()+"&consultaEmpleado="+$("#consultaEmpleado").val(),
+        data:$("#calculoPuntos").serialize()+"&consultaEmpleado="+$("#consultaEmpleado").val()
       }).success(function(data) {
-          $("#valorMaxPrestamo").val(data.valorTotal);
-         $("#mensaje").text("Usted tiene un total de "+data.puntos+" puntos y puede hacer un prestamo maximo de: "+data.valorTotal);
-         $("#prestamo").css("display","block");
+        $("#valorMaxPrestamo").val(data.valorTotal);
+        $("#totalPuntos").text(data.puntos);
+        $("#totalPres").text(data.valorTotal);
+        $("#valNombre").text(data.nombre);
+        $("#valCargo").text(data.cargo);
+        $("#valSueldo").text(data.sueldo);
+        $("#valFecha").text(data.fecha);
+        $("#prestamo").css("display","block");
       });
     }
-  });
+  };
+  $(".reCalc").change(puntosTopeMax);
   //CALCULAR EL VALOR DE LAS CUOTAS DEL EMPLEADO QUE ESTOY CONSULTANDO
   $("#calcuCuotas").click(function(){
     if($("#prestamo").valid()){
