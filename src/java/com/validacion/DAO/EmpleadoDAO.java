@@ -11,6 +11,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -25,6 +26,7 @@ public class EmpleadoDAO {
   private Connection conn = null;
   private static String guardarEmpleados = "INSERT INTO empleado (id, nombre,tipo_de_cargo, sueldo,fecha_ingreso) VALUES (?,?,?,?,?)";
   private static String consultaEmpleados = "SELECT * FROM empleado WHERE id = ?";
+  private static String todosLosEmpleados = "SELECT * FROM empleado ORDER BY id";
   
 
   public EmpleadoDAO() throws SQLException {
@@ -80,6 +82,29 @@ public class EmpleadoDAO {
       return mensajeDevuelto;   
     }
         
+  }
+  public ArrayList<ArrayList<String>> todosLosEmpleados(){
+    ArrayList<ArrayList<String>> allEmpleados = new ArrayList<ArrayList<String>>();
+    int empleado;
+    empleado = 0;
+    String[][] mensajeDevuelto =  null;
+    try {
+      PreparedStatement ps = conn.prepareStatement(todosLosEmpleados);
+      ResultSet resultado = ps.executeQuery();
+      while (resultado.next()) {
+            allEmpleados.add(new ArrayList<String>());
+
+        allEmpleados.get(empleado).add(resultado.getString("id"));
+        allEmpleados.get(empleado).add(resultado.getString("nombre"));
+        allEmpleados.get(empleado).add(resultado.getString("tipo_de_cargo"));
+        allEmpleados.get(empleado).add(resultado.getString("sueldo"));
+        allEmpleados.get(empleado).add(resultado.getString("fecha_ingreso"));
+        empleado++;
+     } 
+    } catch (SQLException ex) {
+      Logger.getLogger(EmpleadoDAO.class.getName()).log(Level.SEVERE, null, ex);
+    }
+      return allEmpleados;
   }
 
   public String getError() {

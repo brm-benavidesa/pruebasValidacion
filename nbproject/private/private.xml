@@ -5,6 +5,7 @@
         <group>
             <file>file:/C:/xampp/htdocs/pruebasValidacion/src/java/com/validacion/Servlets/Sistema.java</file>
             <file>file:/C:/xampp/htdocs/pruebasValidacion/src/java/com/validacion/Clases/Calculos.java</file>
+            <file>file:/C:/xampp/htdocs/pruebasValidacion/src/java/com/validacion/DAO/TopeDAO.java</file>
             <file>file:/C:/xampp/htdocs/pruebasValidacion/web/admin.jsp</file>
             <file>file:/C:/xampp/htdocs/pruebasValidacion/web/calculos.html</file>
             <file>file:/C:/xampp/htdocs/pruebasValidacion/src/java/com/validacion/DAO/VariablesDAO.java</file>
@@ -12,6 +13,7 @@
             <file>file:/C:/xampp/htdocs/pruebasValidacion/src/java/com/validacion/Clases/Variables.java</file>
             <file>file:/C:/xampp/htdocs/pruebasValidacion/web/js/calculos.js</file>
             <file>file:/C:/xampp/htdocs/pruebasValidacion/src/java/com/validacion/Clases/Empleado.java</file>
+            <file>file:/C:/xampp/htdocs/pruebasValidacion/web/js/admin.js</file>
         </group>
     </open-files>
 </project-private>

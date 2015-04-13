@@ -33,6 +33,28 @@ $(document).ready(function () {
       }
     });
   });
+  //TRAER TODOS LOS EMPLEADOS
+  $.ajax({
+    url: "Sistema",
+    type: 'POST',
+    //dataType:"json",
+    data: {traerEmpleados:"ok"}
+  }).success(function (data) {
+    var empleado;
+    empleado = "";
+    $.each(data.empleados,function( key, value ) {
+      empleado +="<tr>"; 
+      empleado +="<td><input type='text' id='editCel"+key+"' value='"+value[0]+"'/></td>"; 
+      empleado +="<td><input type='text' id='editNom"+key+"' value='"+value[1]+"'/></td>"; 
+      empleado +="<td><input type='text' id='editCar"+key+"' value='"+value[2]+"'/></td>"; 
+      empleado +="<td><input type='text' id='editSue"+key+"' value='"+value[3]+"'/></td>"; 
+      empleado +="<td><input type='text' id='editFec"+key+"' value='"+value[4]+"'/></td>"; 
+      empleado +="<td><span class='glyphicon glyphicon-pencil editar'></span></td>"; 
+      empleado +="<td><span class='glyphicon glyphicon-minus-sign borrar'></span></td>"; 
+      empleado +="</tr>"; 
+    });
+      $("#editEmpl").append(empleado);
+  });
   //GUARDAR UN EMPLEADO
   $.ajax({
     url: "Sistema",

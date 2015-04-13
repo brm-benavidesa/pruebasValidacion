@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -109,7 +110,7 @@ public class Sistema extends HttpServlet {
     String errorTope;
     errorTope = "null";
     //empelado[0]="";
-   // System.out.print(json);
+    // System.out.print(json);
     //CONSULTO LAS VARIABLES ACTUALES DEL SISTEMA
     if ((request.getParameter("traeVariable")!=null)) {
       String variablesSistema []=null;
@@ -121,6 +122,19 @@ public class Sistema extends HttpServlet {
       }
       json.put("SMMLV", variablesSistema[0]);
       json.put("interes",variablesSistema[1]);
+      out.print(json);
+      out.close();
+    }
+    //CONSULTO TODOS LOS EMPLEADOS
+    if ((request.getParameter("traerEmpleados")!=null)) {
+      ArrayList<ArrayList<String>> empleados =null;
+      try {
+        EmpleadoDAO varSistema = new EmpleadoDAO();
+        empleados = varSistema.todosLosEmpleados();
+      } catch (SQLException ex) {
+        Logger.getLogger(Sistema.class.getName()).log(Level.SEVERE, null, ex);
+      }
+      json.put("empleados", empleados);
       out.print(json);
       out.close();
     }

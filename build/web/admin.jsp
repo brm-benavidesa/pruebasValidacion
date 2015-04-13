@@ -14,7 +14,17 @@
     <script type="text/javascript" src="js/libs/jquery-validate/jquery.validate.js"></script>
     <script type="text/javascript" src="js/admin.js"></script>
     <link rel="stylesheet" type="text/css" href="js/libs/twitter-bootstrap/css/bootstrap.css" media="all" />
-    <title>Guardar empleado</title>
+    <title>Administrador</title>
+    <style>
+      .editar{
+        color:green;
+        cursor: pointer;
+      }
+      .borrar{
+        color:red;
+        cursor: pointer;
+      }
+    </style>
   </head>
   <body>
     <br />
@@ -36,17 +46,18 @@
         <button type="button"  id="logButton" class="btn btn-success">Ingresar</button>
       </div>
     </form>
-    <div class="container-fluid" >
+    <div class="container-fluid" style="display: block" >
       <div role="tabpanel">
         <!-- Nav tabs -->
         <ul class="nav nav-tabs" role="tablist">
           <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Guardar Empleado</a></li>
           <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Guardar Variables</a></li>
           <li role="presentation"><a href="#topeMaximo" aria-controls="topeMaximo" role="tab" data-toggle="tab">Guardar Tope Maximo</a></li>
+          <li role="presentation"><a href="#consulEmple" aria-controls="consulEmple" role="tab" data-toggle="tab">Consultar Empleado</a></li>
         </ul>
         <br>
         <br>
-        <div class="tab-content" style="display: block"  id="admin">
+        <div class="tab-content" id="admin">
           <div class="col-sm-5 col-md-5 tab-pane active" role="tabpanel"  id="home">
             <form action="Sistema" class="form-horizontal" method="post" role="form" id="guardarEmpleado" >
               <div class="form-group">
@@ -157,6 +168,21 @@
 
               </div>
             </form>
+          </div>
+          <div class="row tab-pane"  role="tabpanel" id="consulEmple">
+            <div class="col-lg-12 col-md-12">
+              <table class="table table-striped table-bordered" id="editEmpl">
+                <tr>
+                  <td>Cedula</td>
+                  <td>Nombre</td>
+                  <td>Cargo</td>
+                  <td>Salario</td>
+                  <td>Fecha de Ingreso</td>
+                  <td>Editar</td>
+                  <td>Eliminar</td>
+                </tr>
+              </table>
+            </div>
           </div>
         </div>
       </div>
