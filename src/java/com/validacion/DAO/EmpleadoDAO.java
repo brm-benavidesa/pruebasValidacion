@@ -27,6 +27,7 @@ public class EmpleadoDAO {
   private static String guardarEmpleados = "INSERT INTO empleado (id, nombre,tipo_de_cargo, sueldo,fecha_ingreso) VALUES (?,?,?,?,?)";
   private static String consultaEmpleados = "SELECT * FROM empleado WHERE id = ?";
   private static String todosLosEmpleados = "SELECT * FROM empleado ORDER BY id";
+  private static String actualizarEmpleado = "UPDATE empleado SET id= ?,nombre= ?,tipo_de_cargo= ?,sueldo= ?,fecha_ingreso= ? WHERE id = ?";
   
 
   public EmpleadoDAO() throws SQLException {
@@ -55,7 +56,7 @@ public class EmpleadoDAO {
     return resultado;
   }
   public String[] consultarEmpleado(long id){
-    String[] mensajeDevuelto = new String[9];
+    String[] mensajeDevuelto = new String[5];
     int empleado;
     empleado = 0;
     String fechaIngreso;
@@ -70,6 +71,7 @@ public class EmpleadoDAO {
         mensajeDevuelto[1] = resultado.getString("tipo_de_cargo");
         mensajeDevuelto[2] = resultado.getString("nombre");
         mensajeDevuelto[3] = resultado.getString("sueldo");
+        mensajeDevuelto[4] = resultado.getString("id");
         empleado++;
      } 
     } catch (SQLException ex) {
@@ -92,8 +94,7 @@ public class EmpleadoDAO {
       PreparedStatement ps = conn.prepareStatement(todosLosEmpleados);
       ResultSet resultado = ps.executeQuery();
       while (resultado.next()) {
-            allEmpleados.add(new ArrayList<String>());
-
+        allEmpleados.add(new ArrayList<String>());
         allEmpleados.get(empleado).add(resultado.getString("id"));
         allEmpleados.get(empleado).add(resultado.getString("nombre"));
         allEmpleados.get(empleado).add(resultado.getString("tipo_de_cargo"));
@@ -106,7 +107,29 @@ public class EmpleadoDAO {
     }
       return allEmpleados;
   }
+  //ACTUALIZAR UN EMPLEADO
+  public boolean actualizaEmpleado(Empleado guardarEmpleado,int where){
+   this.error = "";
+    boolean resultado = true;
+    try {
+      PreparedStatement ps = conn.prepareStatement(actualizarEmpleado);
+      ps.setInt(1, guardarEmpleado.getId());
+      ps.setString(2, guardarEmpleado.getNombre());
+      ps.setString(3, guardarEmpleado.getTipoCargo());
+      ps.setDouble(4, guardarEmpleado.getSueldo());
+      ps.setString(5, guardarEmpleado.getFechaIngreso());
+      ps.setInt(6, where);
+      if (ps.executeUpdate() == 0) {
+        resultado = true;
+      }
+    } catch (SQLException ex) {
+      this.error = "ERROR DE CREACION "+guardarEmpleado.getNombre() ;
+      Logger.getLogger(Empleado.class.getName()).log(Level.SEVERE, null, ex);
+      resultado = false;
+    }
 
+    return resultado;
+  }
   public String getError() {
     return error;
   }

@@ -138,6 +138,54 @@ public class Sistema extends HttpServlet {
       out.print(json);
       out.close();
     }
+    //CONSULTO UN EMPLEADO
+    if ((request.getParameter("buscaEmp")!=null)) {
+      ArrayList<ArrayList<String>> elEmpleados = new ArrayList<ArrayList<String>>();
+      try {
+        EmpleadoDAO empleadoConsulta = new EmpleadoDAO();
+        empelado = empleadoConsulta.consultarEmpleado(Long.parseLong(request.getParameter("buscaEmp")));
+        this.aprobado = "ok";
+      } catch (SQLException ex) {
+        this.aprobado = "Error";
+        Logger.getLogger(Sistema.class.getName()).log(Level.SEVERE, null, ex);
+      }
+      elEmpleados.add(new ArrayList<String>());
+      elEmpleados.get(0).add(empelado[4]);
+      elEmpleados.get(0).add(empelado[2]);
+      elEmpleados.get(0).add(empelado[1]);
+      elEmpleados.get(0).add(empelado[3]);
+      elEmpleados.get(0).add(empelado[0]);
+      json.put("empleados",elEmpleados);
+      out.print(json);
+      out.close();
+    }
+    //ACTUALIZAR UN EMPLEADO
+    if ((request.getParameter("actualizar")!=null)) {
+      boolean empleados = false;
+        Empleado nuevoEmpleado = new Empleado();
+        int cedula;
+        String nombre;
+        String cargo;
+        double sueldo;
+        String fechaIngreso;
+        int where;
+        where = Integer.parseInt(request.getParameter("where"));
+        cedula = Integer.parseInt(request.getParameter("editCel"));
+        nombre = request.getParameter("editNom");
+        cargo = request.getParameter("tipoCargo");
+        sueldo = Double.parseDouble(request.getParameter("editSue"));
+        fechaIngreso = request.getParameter("editFec");
+        nuevoEmpleado.guardarEmpleado(fechaIngreso, cedula, nombre, sueldo, cargo);
+      try {
+        EmpleadoDAO varSistema = new EmpleadoDAO();
+        empleados = varSistema.actualizaEmpleado(nuevoEmpleado, where);
+      } catch (SQLException ex) {
+        Logger.getLogger(Sistema.class.getName()).log(Level.SEVERE, null, ex);
+      }
+      json.put("empleados", empleados);
+      out.print(json);
+      out.close();
+    }
    //CALCULOS GENERALES 
     if ((request.getParameter("consultaEmpleado")!=null)) {
       String variablesSistema []=null;

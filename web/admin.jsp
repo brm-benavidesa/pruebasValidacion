@@ -12,6 +12,7 @@
     <script type="text/javascript" src="js/libs/jquery/jquery.min.js"></script>
     <script type="text/javascript" src="js/libs/twitter-bootstrap/js/bootstrap.js"></script>
     <script type="text/javascript" src="js/libs/jquery-validate/jquery.validate.js"></script>
+    <script type="text/javascript" src="js/validaAdmin.js"></script>
     <script type="text/javascript" src="js/admin.js"></script>
     <link rel="stylesheet" type="text/css" href="js/libs/twitter-bootstrap/css/bootstrap.css" media="all" />
     <title>Administrador</title>
@@ -23,6 +24,9 @@
       .borrar{
         color:red;
         cursor: pointer;
+      }
+      .error{
+        color: red;
       }
     </style>
   </head>
@@ -63,7 +67,7 @@
               <div class="form-group">
                 <label for="id" class="col-lg-2 control-label">id del  Empleado</label>
                 <div class="col-lg-5">
-                  <input type="id" class="form-control" name="id" id="id"
+                  <input type="text" class="form-control" name="id" id="id"
                          placeholder="id del  Empleado">
                 </div>
               </div>
@@ -94,7 +98,7 @@
               <div class="form-group">
                 <label for="fechaIngreso" class="col-lg-2 control-label">Fecha de Ingreso</label>
                 <div class="col-lg-5">
-                  <input type="date" class="form-control" name="fechaIngreso" id="fechaIngreso" 
+                  <input type="date" class="form-control" name="fechaIngreso"  id="fechaIngreso" 
                          placeholder="Fecha de ingreso del empleado">
                 </div>
               </div>
@@ -171,17 +175,23 @@
           </div>
           <div class="row tab-pane"  role="tabpanel" id="consulEmple">
             <div class="col-lg-12 col-md-12">
-              <table class="table table-striped table-bordered" id="editEmpl">
-                <tr>
-                  <td>Cedula</td>
-                  <td>Nombre</td>
-                  <td>Cargo</td>
-                  <td>Salario</td>
-                  <td>Fecha de Ingreso</td>
-                  <td>Editar</td>
-                  <td>Eliminar</td>
-                </tr>
-              </table>
+              <div class="row">
+                <div class="col-lg-12 col-md-12">
+                  <form class='form-horizontal' role='form' id="formEdit">
+                    <div class="form-group">
+                      <div class="col-lg-2">
+                        <input type="text" class="form-control" name="buscaEmp" id="buscaEmp" 
+                               placeholder="cedula">
+                      </div>
+                      <button type="button"  id="buscaBtn" class="btn btn-success">Buscar</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+                <div class="container-fluid" id="editEmpl">
+                  <!--ACA CARGO LOS EMPLEADOS DE LA BASE DE DATOS-->
+                </div>
+              
             </div>
           </div>
         </div>
