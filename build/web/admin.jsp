@@ -151,34 +151,59 @@
               </form>
             </div>
           </div>
-          <div class="col-sm-7 col-md-7 tab-pane" role="tabpanel"  id="topeMaximo">
-            <form action="Sistema" class="form-horizontal" method="post" role="form" id="guardarTope" >
-              <div class="form-group">
-                <label for="admin" class="col-lg-2 control-label">Administrativo</label>
-                <div class="col-lg-4">
-                  <input type="text" class="form-control" name="admin" id="admin" placeholder="cantidad de SMMLV">
-                </div>
+          <div class="col-sm-12 col-md-12 col-lg-12 tab-pane" role="tabpanel"  id="topeMaximo">
+            <div class="row">
+              <div class="col-lg-5 col-md-5">
+                <table class="table table-striped table-bordered">
+                  <tr>
+                    <td><strong>Cargo</strong></td>
+                    <td><strong>Cantidad de salarios actual</strong></td>
+                  </tr>
+                  <tr>
+                    <td>Directivo:</td>
+                    <td><span id="valDirec"></span></td>
+                  </tr>
+                  <tr>
+                    <td>Operativo</td>
+                    <td><span id="valOpera"></span></td>
+                  </tr>
+                  <tr>
+                    <td>Administrativo</td>
+                    <td><span id="valAdmin"></span></td>
+                  </tr>
+                </table>
               </div>
-              <div class="form-group">
-                <label for="opera" class="col-lg-2 control-label">Operativo</label>
-                <div class="col-lg-4">
-                  <input type="text" class="form-control" name="opera" id="opera" placeholder="cantidad de SMMLV">
+              <br />
+            </div>
+            <div class="row">
+              <form action="Sistema" class="form-horizontal" method="post" role="form" id="guardarTope" >
+                <div class="form-group">
+                  <label for="admin" class="col-lg-2 control-label">Administrativo</label>
+                  <div class="col-lg-4">
+                    <input type="text" class="form-control" name="admin" id="admin" placeholder="cantidad de SMMLV">
+                  </div>
                 </div>
-              </div>
-              <div class="form-group">
-                <label for="admin" class="col-lg-2 control-label">Directivo</label>
-                <div class="col-lg-4">
-                  <input type="text" class="form-control" name="direc" id="direc" placeholder="cantidad de SMMLV">
+                <div class="form-group">
+                  <label for="opera" class="col-lg-2 control-label">Operativo</label>
+                  <div class="col-lg-4">
+                    <input type="text" class="form-control" name="opera" id="opera" placeholder="cantidad de SMMLV">
+                  </div>
                 </div>
-              </div>
-              <div class="col-lg-2 control-label">
-                <button type="button" id="guardaTope" class="btn btn-success">Guardar</button>
-              </div><br>
-              <div class="form-group">
-                <h3 class="col-lg-4 control-label" style="color: red;display: none" id="varMsg">Topes Guardados</h3>
+                <div class="form-group">
+                  <label for="admin" class="col-lg-2 control-label">Directivo</label>
+                  <div class="col-lg-4">
+                    <input type="text" class="form-control" name="direc" id="direc" placeholder="cantidad de SMMLV">
+                  </div>
+                </div>
+                <div class="col-lg-2 control-label">
+                  <button type="button" id="guardaTope" class="btn btn-success">Guardar</button>
+                </div><br>
+                <div class="form-group">
+                  <h3 class="col-lg-4 control-label" style="color: red;display: none" id="topeMsg">maximo de SMMLV Guardado</h3>
 
-              </div>
-            </form>
+                </div>
+              </form>
+            </div>
           </div>
           <div class="row tab-pane"  role="tabpanel" id="consulEmple">
             <div class="col-lg-12 col-md-12">

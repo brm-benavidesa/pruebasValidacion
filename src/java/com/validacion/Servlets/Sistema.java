@@ -125,6 +125,21 @@ public class Sistema extends HttpServlet {
       out.print(json);
       out.close();
     }
+    //CONSULTO LOS TOPES ACTUALES
+    if ((request.getParameter("topesXSalario")!=null)) {
+      String variablesSistema []=null;
+      try {
+        TopeDAO topeSistema = new TopeDAO();
+        variablesSistema = topeSistema.consultarVariables();
+      } catch (SQLException ex) {
+        Logger.getLogger(Sistema.class.getName()).log(Level.SEVERE, null, ex);
+      }
+      json.put("direc", variablesSistema[0]);
+      json.put("opera",variablesSistema[1]);
+      json.put("admin",variablesSistema[2]);
+      out.print(json);
+      out.close();
+    }
     //CONSULTO TODOS LOS EMPLEADOS
     if ((request.getParameter("traerEmpleados")!=null)) {
       ArrayList<ArrayList<String>> empleados =null;
@@ -183,6 +198,21 @@ public class Sistema extends HttpServlet {
         Logger.getLogger(Sistema.class.getName()).log(Level.SEVERE, null, ex);
       }
       json.put("empleados", empleados);
+      out.print(json);
+      out.close();
+    }
+    //ELIMINAR UN EMPLEADO
+    if ((request.getParameter("elimino")!=null)) {
+        boolean elimaEmpleado = false;
+        int where;
+        where = Integer.parseInt(request.getParameter("whereElimino"));
+      try {
+        EmpleadoDAO elimimaEMpleado = new EmpleadoDAO();
+        elimaEmpleado = elimimaEMpleado.eliminar( where);
+      } catch (SQLException ex) {
+        Logger.getLogger(Sistema.class.getName()).log(Level.SEVERE, null, ex);
+      }
+      json.put("empleados",elimaEmpleado);
       out.print(json);
       out.close();
     }

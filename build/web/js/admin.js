@@ -1,34 +1,52 @@
-//FUNCION QU ENVIA DATOS PARA ACTUALIZAR
-function editar(id) {
-  $("#empleadoNum"+id).validate({
-    rules: {
-      editCel: {required: true, digits: true},
-      editNom: {required: true},
-      editSue: {required: true, number: true},
-      editFec: {required: true}
-    }, messages: {
-      editCel: {required: "Ingrese la Cedula del Empleado", digits: "Ingrese solo numeros"},
-      editNom: {required: "Ingrese el nombre del Empleado"},
-      editSue: {required: "Ingrese el sueldo del empleado", number: "Ingrese solo numeros"},
-      editFec: {required: "Ingrese la fecha de contratacion"}
-    }
-  });
-  if($("#empleadoNum"+id).valid()){
-    var confirma = confirm("Actualizar la informacion del empleado: "+$("#name"+id).val());
-    if(confirma){
-      $.ajax({
-        url: "Sistema",
-        type: 'POST',
-        //dataType:"json",
-        data: $("#empleadoNum" + id).serialize() + "&actualizar=ok"
-      }).success(function (data) {
+  //FUNCION QU ENVIA DATOS PARA ACTUALIZAR
+  function editar(id) {
+    $("#empleadoNum"+id).validate({
+      rules: {
+        editCel: {required: true, digits: true},
+        editNom: {required: true},
+        editSue: {required: true, number: true},
+        editFec: {required: true}
+      }, messages: {
+        editCel: {required: "Ingrese la Cedula del Empleado", digits: "Ingrese solo numeros"},
+        editNom: {required: "Ingrese el nombre del Empleado"},
+        editSue: {required: "Ingrese el sueldo del empleado", number: "Ingrese solo numeros"},
+        editFec: {required: "Ingrese la fecha de contratacion"}
+      }
+    });
+    if($("#empleadoNum"+id).valid()){
+      var confirma = confirm("Actualizar la informacion del empleado: "+$("#name"+id).val());
+      if(confirma){
+        $.ajax({
+          url: "Sistema",
+          type: 'POST',
+          //dataType:"json",
+          data: $("#empleadoNum" + id).serialize() + "&actualizar=ok"
+        }).success(function (data) {
 
-      });
-    }else{
-      traeEmpleados();
+        });
+      }else{
+        traeEmpleados();
+      }
     }
-  }
-};
+  };
+  //FUNCION QUE ELIMINA EMPLEADO
+  function eliminar(id) {
+      var confirma = confirm("Eliminar el empleado: "+$("#name"+id).val());
+      if(confirma){
+        $.ajax({
+          url: "Sistema",
+          type: 'POST',
+          //dataType:"json",
+          data: {elimino:"ok",whereElimino:$("#where"+id).val()}
+        }).success(function (data) {
+          alert("Registro eliminado");
+           traeEmpleados(); 
+        });
+      }else{
+        traeEmpleados();
+      }
+    
+  };
   //TRAER TODOS LOS EMPLEADOS
   var traeEmpleados = function(){
     $.ajax({
@@ -48,14 +66,14 @@ function editar(id) {
     $.each(data.empleados, function (key, value) {
       empleado += "<form id='empleadoNum" + key + "'>";
       empleado += "<div class='row'>";
-      empleado += "<input type='hidden' name='where' value='" + value[0] + "'/>";
+      empleado += "<input type='hidden' name='where' id='where" + key + "' value='" + value[0] + "'/>";
       empleado += "<div class='col-lg-2 col-md-2 table-bordered'><input type='text' class='form-control' name='editCel'  value='" + value[0] + "'/></div>";
       empleado += "<div class='col-lg-2 col-md-2 table-bordered'><input type='text' class='form-control' name='editNom' id='name" + key + "' value='" + value[1] + "'/></div>";
       empleado += "<div class='col-lg-2 col-md-2 table-bordered'>" + cargo(value[2], key) + "</div>";
       empleado += "<div class='col-lg-2 col-md-2 table-bordered'><input type='text' class='form-control' name='editSue' value='" + value[3] + "'/></div>";
       empleado += "<div class='col-lg-2 col-md-2 table-bordered'><input type='date' class='form-control' name='editFec' value='" + value[4] + "'/></div>";
       empleado += "<div class='col-lg-1 col-md-1 table-bordered glyphicon glyphicon-pencil editar' onClick='javascript:editar(" + key + ")' ></div>";
-      empleado += "<div class='col-lg-1 col-md-1 table-bordered glyphicon glyphicon-minus-sign borrar'></div>";
+      empleado += "<div class='col-lg-1 col-md-1 table-bordered glyphicon glyphicon-minus-sign borrar' onClick='javascript:eliminar(" + key + ")'></div>";
       empleado += "</div>";
       empleado += "</form>";
     });
@@ -125,14 +143,17 @@ $(document).ready(function () {
   $("#tablaEmpleados").click(traeEmpleados);
 
   //TRAER LAS VARIABLES DEL SISTEMA
-  $.ajax({
-    url: "Sistema",
-    type: 'POST',
-    data: {traeVariable: "true"}
-  }).success(function (data) {
-    $('#valSMMLV').text(data.SMMLV);
-    $('#valInteres').text(data.interes);
-  });
+  var variablesSistema = function(){
+    $.ajax({
+      url: "Sistema",
+      type: 'POST',
+      data: {traeVariable: "true"}
+    }).success(function (data) {
+      $('#valSMMLV').text(data.SMMLV);
+      $('#valInteres').text(data.interes);
+    });
+  };
+  variablesSistema();
   //GUARDAR UNA VARIABLE
   $("#guardaVariable").click(function () {
     if($("#guardarVariables").valid()){
@@ -144,6 +165,7 @@ $(document).ready(function () {
         if ((data.respuesta === "ok")) {
           $("#varMsg").fadeIn();
           $("#varMsg").fadeOut(5000);
+          variablesSistema();
         }
         else {
           $("#varMsg").text(data.respuesta);
@@ -170,6 +192,19 @@ $(document).ready(function () {
       });
     }
   });
+  //TRAER LAS VARIABLES DEL SISTEMA
+  var topesXSalario = function(){
+    $.ajax({
+      url: "Sistema",
+      type: 'POST',
+      data: {topesXSalario: "true"}
+    }).success(function (data) {
+      $('#valDirec').text(data.direc);
+      $('#valOpera').text(data.opera);
+      $('#valAdmin').text(data.admin);
+    });
+  };
+  topesXSalario();
   //GUARDAR UNA TOPE MAXIMO
   $("#guardaTope").click(function () {
     if($("#guardarTope").valid()){
@@ -178,7 +213,16 @@ $(document).ready(function () {
         type: 'POST',
         data: $("#guardarTope").serialize()
       }).success(function (data) {
-
+        if ((data.respuesta === "ok")) {
+          $("#topeMsg").fadeIn();
+          $("#topeMsg").fadeOut(5000);
+          topesXSalario();
+        }
+        else {
+          $("#topeMsg").text(data.respuesta);
+          $("#topeMsg").fadeIn();
+          $("#topeMsg").fadeOut(5000);
+        }
       });
     }
   });

@@ -28,6 +28,7 @@ public class EmpleadoDAO {
   private static String consultaEmpleados = "SELECT * FROM empleado WHERE id = ?";
   private static String todosLosEmpleados = "SELECT * FROM empleado ORDER BY id";
   private static String actualizarEmpleado = "UPDATE empleado SET id= ?,nombre= ?,tipo_de_cargo= ?,sueldo= ?,fecha_ingreso= ? WHERE id = ?";
+  private static String eliminarEmpleado = "DELETE FROM empleado WHERE id = ?";
   
 
   public EmpleadoDAO() throws SQLException {
@@ -124,6 +125,23 @@ public class EmpleadoDAO {
       }
     } catch (SQLException ex) {
       this.error = "ERROR DE CREACION "+guardarEmpleado.getNombre() ;
+      Logger.getLogger(Empleado.class.getName()).log(Level.SEVERE, null, ex);
+      resultado = false;
+    }
+
+    return resultado;
+  }
+   public boolean eliminar(int where) {
+    this.error = "";
+    boolean resultado = false;
+    try {
+      PreparedStatement ps = conn.prepareStatement(eliminarEmpleado);
+      ps.setInt(1, where);
+      if (ps.executeUpdate() == 0) {
+        resultado = true;
+      }
+    } catch (SQLException ex) {
+      this.error = ex.getSQLState();
       Logger.getLogger(Empleado.class.getName()).log(Level.SEVERE, null, ex);
       resultado = false;
     }

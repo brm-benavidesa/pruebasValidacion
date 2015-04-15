@@ -25,7 +25,7 @@ public class TopeDAO {
   private String error = "";
   private Connection conn = null;
   private static String guardarVariable = "INSERT INTO tope_maximo (id,tipo_de_cargo,cantidad_de_salarios) VALUES (null,?,?)";
-  private static String consultaVariable = "SELECT * FROM variable WHERE id IN (SELECT MAX(id) FROM variable GROUP BY tipo) ORDER BY tipo DESC";
+  private static String consultaMaxSalarios = "SELECT * FROM tope_maximo WHERE id IN (SELECT MAX(id) FROM tope_maximo GROUP BY tipo_de_cargo) ORDER BY tipo_de_cargo DESC";
   private static String topeXEmpleado= "SELECT cantidad_de_salarios FROM tope_maximo WHERE tipo_de_cargo = ? ORDER BY id DESC LIMIT 1";
 
   public TopeDAO() throws SQLException {
@@ -55,15 +55,15 @@ public class TopeDAO {
   }
 
   public String[] consultarVariables(){
-    String[] mensajeDevuelto = new String[2];
+    String[] mensajeDevuelto = new String[3];
     int empleado;
     empleado = 0;
 
     try {
-      PreparedStatement ps = conn.prepareStatement(consultaVariable);
+      PreparedStatement ps = conn.prepareStatement(consultaMaxSalarios);
       ResultSet resultado = ps.executeQuery();
       while (resultado.next()) {
-        mensajeDevuelto[empleado] = resultado.getString("valor");
+        mensajeDevuelto[empleado] = resultado.getString("cantidad_de_salarios");
         empleado++;
       }
     } catch (SQLException ex) {
