@@ -370,7 +370,7 @@ public class Sistema extends HttpServlet {
             Logger.getLogger(Sistema.class.getName()).log(Level.SEVERE, null, ex);
           }
         }
-    }else{
+    }else if(request.getParameter("id")!=null){
         Empleado nuevoEmpleado = new Empleado();
         int cedula;
         String nombre;

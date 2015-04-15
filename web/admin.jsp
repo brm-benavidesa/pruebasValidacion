@@ -20,13 +20,20 @@
       .editar{
         color:green;
         cursor: pointer;
+        height: 36px;
+        text-align: center;
+        padding: 7px;
       }
       .borrar{
         color:red;
         cursor: pointer;
+        height: 36px;
+        text-align: center;
+        padding: 7px;
       }
       .error{
         color: red;
+        font-size: 0.8em;
       }
     </style>
   </head>
@@ -57,7 +64,7 @@
           <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Guardar Empleado</a></li>
           <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Guardar Variables</a></li>
           <li role="presentation"><a href="#topeMaximo" aria-controls="topeMaximo" role="tab" data-toggle="tab">Guardar Tope Maximo</a></li>
-          <li role="presentation"><a href="#consulEmple" aria-controls="consulEmple" role="tab" data-toggle="tab">Consultar Empleado</a></li>
+          <li role="presentation" id="tablaEmpleados"><a href="#consulEmple" aria-controls="consulEmple" role="tab" data-toggle="tab">Consultar Empleado</a></li>
         </ul>
         <br>
         <br>
