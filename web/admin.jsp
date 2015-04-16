@@ -40,7 +40,7 @@
   <body>
     <br />
     <br />
-    <form action="Sistema" class="form" method="post" role="form" id="logIn" style="display: none">
+    <form action="Sistema" class="form" method="post" role="form" id="logIn" style="display: block">
       <div class="form-group">
         <div class="col-lg-2">
           <input type="text" class="form-control" name="usuario" id="usuario"
@@ -57,7 +57,7 @@
         <button type="button"  id="logButton" class="btn btn-success">Ingresar</button>
       </div>
     </form>
-    <div class="container-fluid" style="display: block" >
+    <div class="container-fluid" style="display: none" id="admin" >
       <div role="tabpanel">
         <!-- Nav tabs -->
         <ul class="nav nav-tabs" role="tablist">
@@ -68,7 +68,7 @@
         </ul>
         <br>
         <br>
-        <div class="tab-content" id="admin">
+        <div class="tab-content" >
           <div class="col-sm-5 col-md-5 tab-pane active" role="tabpanel"  id="home">
             <form action="Sistema" class="form-horizontal" method="post" role="form" id="guardarEmpleado" >
               <div class="form-group">

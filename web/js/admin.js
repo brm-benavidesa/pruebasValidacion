@@ -22,7 +22,12 @@
           //dataType:"json",
           data: $("#empleadoNum" + id).serialize() + "&actualizar=ok"
         }).success(function (data) {
-
+            if(!data.empleados){
+              alert("Error al editar empleado");
+              traeEmpleados();
+            }else{
+              alert("Empleado editado con exito");
+            }
         });
       }else{
         traeEmpleados();
@@ -106,6 +111,11 @@
 
 $(document).ready(function () {
   //INGRESAS COMO ADMINISTRADOR AL SISTEMA
+  var x = document.cookie;
+  if(x!==""){
+    $("#logIn").css("display", "none");
+    $("#admin").fadeIn();
+  }
   $("#logButton").click(function () {
     $.ajax({
       url: "Sistema",
@@ -116,6 +126,7 @@ $(document).ready(function () {
       if ((data.respuesta === "ok")) {
         $("#logIn").css("display", "none");
         $("#admin").fadeIn();
+        document.cookie="entro=ok; path=/";
       }
       else {
         alert("Error en los datos de autenticacion")
